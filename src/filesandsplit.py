@@ -1,16 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
-"""
-Print sys.argv[0] # devuelve el nombre del archivo.
-Print sys.argv[1] # devuelve el primer argumento en este caso "hola"
-Print sys.argv[2] # devuelve elsegundo argumento en este caso "mundo"
-"""
+#libreria para thread
+import threading
+
 self = sys.argv[0]
 arguments = sys.argv[1:]
-
-
-
+"""
+threads = list()
+for i in range(3):
+    t = threading.Thread(target=input_split, args=(i,))
+    threads.append(t)
+    t.start()
+"""
 #split the data 
 def input_split(arguments):
 	
@@ -40,7 +42,7 @@ def mapping (words):
 	return MyWords
 
 
-def shuffling_reduce():
+def shuffling_reduce(linedict):
 	pass
 
 
