@@ -1,25 +1,47 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
+"""
+Print sys.argv[0] # devuelve el nombre del archivo.
+Print sys.argv[1] # devuelve el primer argumento en este caso "hola"
+Print sys.argv[2] # devuelve elsegundo argumento en este caso "mundo"
+"""
+self = sys.argv[0]
+arguments = sys.argv[1:]
 
-#open file extract data and close file
-f = open('a.txt', 'r')
-print "Name of the file: ", f.name
-data = f.read().replace("\n", " ").replace(".", " ").replace(",", " ")
 
-
-f.close()
 
 #split the data 
-def split_and_dict(data):
+def input_split(arguments):
 	
-    # split the text
-    words = data.split(" ")
+	#open file extract data and close file
+	for argument in arguments:
+		f = open(argument, 'r')
 
-    MyWords = {word:1 for word in words}
+	while True:
+		line = f.readline().lower().replace("\n", " ").replace(".", " ").replace(",", " ").replace("l'", " ")
+		words = line.split(" ")
+		linedict = mapping(words)
+		if not line: break
 
-    print MyWords
-    return
+	f.close()
 
-split_and_dict(data)
+	return 
 
-	
+
+
+def mapping (words):
+
+	MyWords = {word:1 for word in words}
+	if MyWords.has_key(''):
+		del MyWords['']
+
+	print  MyWords
+	return MyWords
+
+
+def shuffling_reduce():
+	pass
+
+
+words = input_split(arguments)
