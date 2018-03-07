@@ -1,40 +1,45 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import sys
+import re
 #libreria para thread
-import threading
+import multiprocessing
 
 self = sys.argv[0]
 arguments = sys.argv[1:]
-"""
-threads = list()
-for i in range(3):
-    t = threading.Thread(target=input_split, args=(i,))
-    threads.append(t)
-    t.start()
-"""
+
 #split the data 
-def input_split(arguments):
-	
+def input_split(arguments, chunk_size=1024):
+
 	#open file extract data and close file
 	for argument in arguments:
 		f = open(argument, 'r')
-
+	
 	while True:
-		line = f.readline().lower().replace("\n", " ").replace(".", " ").replace(",", " ").replace("l'", " ")
-		words = line.split(" ")
-		linedict = mapping(words)
-		if not line: break
-
-	f.close()
-
-	return 
+		data = f.read(chunk_size)
+		procesfile = process_data(data)
+		linedict = mapping(procesfile)
+		if not data: break
 
 
+def process_data(data):
 
-def mapping (words):
+	data = data.lower().replace("\n", " ")
+	data = re.sub(r"[\.\,\;\:\l']", '', data)
+	data = data.split(" ")
 
-	MyWords = {word:1 for word in words}
+	return data
+
+def mapping (procesfile):
+
+	MyWords = {}
+	for valor in procesfile:
+		if valor in MyWords:
+			MyWords[valor] += 1
+		else:
+			MyWords[valor] = 1
+
 	if MyWords.has_key(''):
 		del MyWords['']
 
@@ -43,7 +48,14 @@ def mapping (words):
 
 
 def shuffling_reduce(linedict):
-	pass
+	result = {}
+	for word in linedict:
+		if word in result:
+			result[word] += 1
+		else:
+			result[word] = 1
+	print  result
+	return result   
 
-
-words = input_split(arguments)
+resultinput = input_split(arguments)
+outmapping = shuffling_reduce(linedict)
