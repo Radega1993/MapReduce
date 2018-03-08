@@ -3,36 +3,39 @@
 
 import sys
 import re
-#libreria para thread
-import multiprocessing
+import pprint
 
-self = sys.argv[0]
-arguments = sys.argv[1:]
 
-#split the data 
-def input_split(arguments, chunk_size=1024):
 
-	#open file extract data and close file
-	for argument in arguments:
-		f = open(argument, 'r')
-	
+
+# split the data
+def input_split():
+	# open file extract data and close file
+	#for argument in arguments:
+	f = open('a.txt', 'r')
+
 	while True:
-		data = f.read(chunk_size)
+		data = f.readline(10)
 		procesfile = process_data(data)
 		linedict = mapping(procesfile)
+		outmapping = shuffling_reduce(linedict)
+
 		if not data: break
 
 
 def process_data(data):
 
-	data = data.lower().replace("\n", " ")
-	data = re.sub(r"[\.\,\;\:\l']", '', data)
+	data = data.lower()
+	data = re.sub(r'\W+', '', data)
+	"""
+				data = data.lower().replace("\n", "").replace(".", "").replace(",", "").replace("!", "").replace("-", "").replace("¡", "")
+				data = data.replace("?", "").replace("¿", "").replace("(", "").replace(")", "").replace("  ", " ").replace(";", " ")"""
 	data = data.split(" ")
 
 	return data
 
-def mapping (procesfile):
 
+def mapping(procesfile):
 	MyWords = {}
 	for valor in procesfile:
 		if valor in MyWords:
@@ -40,22 +43,21 @@ def mapping (procesfile):
 		else:
 			MyWords[valor] = 1
 
-	if MyWords.has_key(''):
-		del MyWords['']
-
-	print  MyWords
 	return MyWords
 
 
+final_dict = dict()
 def shuffling_reduce(linedict):
 	result = {}
-	for word in linedict:
-		if word in result:
-			result[word] += 1
+	for key in linedict.keys():
+		if key not in final_dict:
+			final_dict[key] = 1
 		else:
-			result[word] = 1
-	print  result
-	return result   
+			final_dict[key] += 1
+			
+	return result
 
-resultinput = input_split(arguments)
-outmapping = shuffling_reduce(linedict)
+
+resultinput = input_split()
+
+pprint.pprint(final_dict)
