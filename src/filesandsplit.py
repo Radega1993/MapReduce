@@ -3,61 +3,63 @@
 
 import sys
 import re
-import pprint
 
-
+self = sys.argv[0]
+arguments = sys.argv[1:]
+final_dict = dict()
 
 
 # split the data
 def input_split():
-	# open file extract data and close file
-	#for argument in arguments:
-	f = open('a.txt', 'r')
-
-	while True:
-		data = f.readline(10)
-		procesfile = process_data(data)
-		linedict = mapping(procesfile)
-		outmapping = shuffling_reduce(linedict)
-
-		if not data: break
+    # open file extract data and close file
+    for argument in arguments:
+        print(argument + ":")
+        f = open(argument, 'r')
+        final_dict.clear()
+        while True:
+            data = f.readline(2000)
+            process_file = process_data(data)
+            line_dict = mapping(process_file)
+            shuffling_reduce(line_dict)
+            if not data: break
+        print_result()
 
 
 def process_data(data):
+    data = data.lower()
+    data = re.sub(r'\W+', ' ', data)
+    data = data.split(" ")
 
-	data = data.lower()
-	data = re.sub(r'\W+', '', data)
-	"""
-				data = data.lower().replace("\n", "").replace(".", "").replace(",", "").replace("!", "").replace("-", "").replace("¡", "")
-				data = data.replace("?", "").replace("¿", "").replace("(", "").replace(")", "").replace("  ", " ").replace(";", " ")"""
-	data = data.split(" ")
-
-	return data
+    return data
 
 
-def mapping(procesfile):
-	MyWords = {}
-	for valor in procesfile:
-		if valor in MyWords:
-			MyWords[valor] += 1
-		else:
-			MyWords[valor] = 1
+def mapping(process_file):
+    my_words = {}
+    for valor in process_file:
+        if valor in my_words:
+            my_words[valor] += 1
+        else:
+            my_words[valor] = 1
 
-	return MyWords
-
-
-final_dict = dict()
-def shuffling_reduce(linedict):
-	result = {}
-	for key in linedict.keys():
-		if key not in final_dict:
-			final_dict[key] = 1
-		else:
-			final_dict[key] += 1
-			
-	return result
+    return my_words
 
 
-resultinput = input_split()
+def shuffling_reduce(line_dict):
+    result = {}
+    for key in line_dict.keys():
+        if key not in final_dict:
+            final_dict[key] = 1
+        else:
+            final_dict[key] += 1
 
-pprint.pprint(final_dict)
+    return result
+
+
+def print_result():
+    final_dict.pop("")
+    for key in final_dict.keys():
+        print(key + ' : ' + str(final_dict[key]))
+    print('')
+
+
+input_split()
