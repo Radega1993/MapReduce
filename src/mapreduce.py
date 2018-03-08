@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+#NIU 1390196 DE ARRIBA GARCIA, RAÜL
+
 import sys
 import re
 
@@ -9,8 +11,8 @@ arguments = sys.argv[1:]
 final_dict = dict()
 
 
-# split the data
-def input_split():
+# take the files
+def input():
     # open file extract data and close file
     for argument in arguments:
         print(argument + ":")
@@ -18,14 +20,15 @@ def input_split():
         final_dict.clear()
         while True:
             data = f.readline(2000)
-            process_file = process_data(data)
+            process_file = process_data_split(data)
             line_dict = mapping(process_file)
             shuffling_reduce(line_dict)
             if not data: break
         print_result()
 
 
-def process_data(data):
+# proces all the data with lowecase, take out strange characters and split words
+def process_data_split(data):
     data = data.lower()
     data = re.sub(r'\W+', ' ', data)
     data = data.split(" ")
@@ -33,6 +36,7 @@ def process_data(data):
     return data
 
 
+# Mapping the data in a dictionary
 def mapping(process_file):
     my_words = {}
     for valor in process_file:
@@ -44,6 +48,7 @@ def mapping(process_file):
     return my_words
 
 
+# Merging all dict and having a result
 def shuffling_reduce(line_dict):
     result = {}
     for key in line_dict.keys():
@@ -55,6 +60,7 @@ def shuffling_reduce(line_dict):
     return result
 
 
+# print the result on the console
 def print_result():
     final_dict.pop("")
     for key in final_dict.keys():
@@ -62,4 +68,4 @@ def print_result():
     print('')
 
 
-input_split()
+input()
